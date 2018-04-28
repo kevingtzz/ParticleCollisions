@@ -1,8 +1,10 @@
 let qtree
 function setup() {
-  createCanvas(400, 400) //crea el frame
+  let width = 1450
+  let height = 850
+  createCanvas(width, height) //crea el frame
 
-  let boundary = new Rectangle(200,200,200,200) //crea el rectangulo
+  let boundary = new Rectangle(width/2, width/2, width/2, width/2) //crea el rectangulo
   qtree = new Quadtree(boundary,4) //crea la primera fase del quadtree
   console.log(qtree)
 
