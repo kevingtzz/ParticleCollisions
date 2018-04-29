@@ -25,6 +25,13 @@ class Rectangle {
             point.y >= this.y - this.h &&
             point.y <= this.y + this.h)
   }
+
+  intersects(range) { // preguntar video 2
+    return !(range.x - range.w > this.x + this.w ||
+            range.x + range.w < this.x - this.w ||
+            range.y - range.h > this.y + this.h ||
+            range.y + range.h < this.y - this.h)
+  }
 }
 
 class Quadtree {
@@ -76,6 +83,29 @@ class Quadtree {
       }
     }
   }
+
+  query(range, found) { // esta funcion consulta la cantidad de puntos que hay en el rectangulo de verificaciones
+    if (!found) {
+      found = []
+    }
+    if (!this.boundary.intersects(range)) {
+      return
+    } else {
+      for (let p of this.points) {
+        //count++ se usaba para contar la cantidad de verificaciones necesarias
+        if (range.contains(p)) {
+          found.push(p)
+        }
+      }
+      if (this.divided) {
+        this.northwest.query(range, found)
+        this.northeast.query(range, found)
+        this.southwest.query(range, found)
+        this.southeast.query(range, found)
+      }
+    }
+    return found
+  }
 //preguntar por la funcion show
   show() { // este metodo dibuja el quadtree los siguietes son metodos de la libreria P5
     stroke(255)
@@ -89,7 +119,7 @@ class Quadtree {
       this.southwest.show()
       this.southeast.show()
     }
-    for (let p of this.points) {
+    for (let p of this.points) {// visualizacion de los puntos
       strokeWeight(4)
       point(p.x, p.y)
     }
